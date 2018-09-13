@@ -51,7 +51,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Clientes.cs" />
     <Compile Include="Clients.cs" />
+    <Compile Include="CodeFirst\CodeFirst.cs" />
+    <Compile Include="CodeFirst\Customer.cs" />
+    <Compile Include="CodeFirst\Reservation.cs" />
     <Compile Include="Controler.cs" />
     <Compile Include="EDMX\CATEGORIE.cs">
       <DependentUpon>LocationDbFirst.tt</DependentUpon>
@@ -84,6 +88,15 @@
       <DependentUpon>LocationDbFirst.tt</DependentUpon>
     </Compile>
     <Compile Include="LOUES.cs" />
+    <Compile Include="Migrations\201809131308450_InitialCreate.cs" />
+    <Compile Include="Migrations\201809131308450_InitialCreate.Designer.cs">
+      <DependentUpon>201809131308450_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809131327054_AJOUT_PAYS.cs" />
+    <Compile Include="Migrations\201809131327054_AJOUT_PAYS.Designer.cs">
+      <DependentUpon>201809131327054_AJOUT_PAYS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -112,6 +125,14 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201809131308450_InitialCreate.resx">
+      <DependentUpon>201809131308450_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809131327054_AJOUT_PAYS.resx">
+      <DependentUpon>201809131327054_AJOUT_PAYS.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -14,8 +14,8 @@ namespace Location_voitures_ADO_console
     {
         public static string strConnexion = @"Data Source=(localdb)\MSSQLLocalDB; Integrated Security=SSPI;Initial Catalog=LOCATION";
        
-
         LOCATIONEntities Context = new LOCATIONEntities();
+
 
         #region Table client
         public void WriteClient(CLIENT client)

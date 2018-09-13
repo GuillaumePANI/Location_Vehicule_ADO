@@ -27,6 +27,7 @@ namespace Location_voitures_ADO_console.EDMX
         public string ADRESSE { get; set; }
         public int CODE_POSTAL { get; set; }
         public string VILLE { get; set; }
+        public string PAYS { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LOUE> LOUE { get; set; }

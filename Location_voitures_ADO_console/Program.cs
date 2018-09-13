@@ -1,4 +1,5 @@
-﻿using Location_voitures_ADO_console.EDMX;
+﻿using Location_voitures_ADO_console.CodeFirst;
+using Location_voitures_ADO_console.EDMX;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,7 +12,6 @@ namespace Location_voitures_ADO_console
 {
     class Program
     {
-        static string choix = "";
         static string save = "";
         public static Controler controler = new Controler();
 
@@ -19,14 +19,17 @@ namespace Location_voitures_ADO_console
         static void Main(string[] args)
         {
             //MENU PRINCIPAL
-            while (AffichageMenuPrincipal() != "q")
+            string choix = AffichageMenuPrincipal();
+            while (choix != "q")
+            {
                 switch (choix)
                 {
-
                     case "1":
                         {
                             //MENU CRUD CLIENT
-                            while (AffichageMenuClient() != "q")
+                            choix = AffichageMenuClient();
+                            while (choix != "q")
+                            {
                                 switch (choix)
                                 {
                                     case "1":
@@ -66,13 +69,16 @@ namespace Location_voitures_ADO_console
 
 
                                 }
+                                choix = AffichageMenuClient();
+                            }
                             break;
                         }
-
                     case "2":
                         {
                             //MENU CRUD LOCATION
-                            while (AffichageMenuLoc() != "q")
+                            choix = AffichageMenuLoc();
+                            while (choix != "q")
+                            {
                                 switch (choix)
                                 {
                                     case "1":
@@ -112,35 +118,37 @@ namespace Location_voitures_ADO_console
 
 
                                 }
+                                choix = AffichageMenuLoc();
+                            }
                             break;
                         }
-
                     default:
-                        Console.WriteLine("Erreur, veuillez recommencer"); break;
+                        {
+                            Console.WriteLine("Erreur, veuillez recommencer");
+                            break;
+                        }
                 }
-
+                choix = AffichageMenuPrincipal();
+            }
+            //CodeFist code = new CodeFist();
+            //Customer cust = new Customer { Name = "bobby", FirstName = "Ewing", Birthdate = new DateTime(2000-02-21), City = "strasbourg" };
+            //List<Customer> list = new List<Customer>();
+            //list = code.customers.ToList<Customer>();
         }
-
+        #region Méthodes
         public static string GetInfo(string msg)
         {
             Console.WriteLine(msg);
             return Console.ReadLine().ToUpper();
         }
-
         public static string AffichageMenuPrincipal()
         {
             Console.WriteLine("Sur quel fichier voulez vous travailler ?");
             Console.WriteLine("-1- Fichier Client");
             Console.WriteLine("-2- Fichier Location");
             Console.WriteLine("-Q- Quitter");
-            return choix = Console.ReadLine();
+            return Console.ReadLine();
         }
-
-
-
-
-
-
 
         #region Manipulation BddCLIENT
 
@@ -152,7 +160,7 @@ namespace Location_voitures_ADO_console
             Console.WriteLine("-3- Mise à jour du fichier client");
             Console.WriteLine("-4- Suppression d'un client");
             Console.WriteLine("-Q- Revenir au menu précédent");
-            return choix = Console.ReadLine();
+            return  Console.ReadLine();
         }
 
 
@@ -166,10 +174,8 @@ namespace Location_voitures_ADO_console
             string MessageAdresse = "Veuillez renseigner l'ADRESSE (numéro et nom de rue) puis valider en appuyant sur entrée";
             string MessagePostal = "Veuillez renseigner le CODE POSTAL puis valider en appuyant sur entrée";
             string MessageVille = "Veuillez renseigner la VILLE puis valider en appuyant sur entrée";
-
             DateTime birthdate;
             int codeP;
-
             #endregion
 
             string nom = GetInfo(MessageNom).ToUpper(); //récupère le nom en majuscule
@@ -184,15 +190,15 @@ namespace Location_voitures_ADO_console
 
             string ville = GetInfo(MessageVille).ToUpper(); //récupère la ville en majuscule
 
-            Console.WriteLine($"Voulez vous ajouter à la base de donnée le client Nom : {nom}, Prénom : {prenom}, né le : {birthdate.ToString("dd/MM/yyyy")}, domicilié au {adresse} {codeP} {ville}");
-            Console.WriteLine("O / N");
-            save = Console.ReadLine().ToUpper();
             CLIENT client = new CLIENT();
             client.NOM = nom; client.PRENOM = prenom; client.DATE_DE_NAISSANCE = birthdate; client.ADRESSE = adresse; client.CODE_POSTAL = codeP; client.VILLE = ville; ;
             return client;
         }
         public static void Ecrire_new_client(CLIENT client)
         {
+            Console.WriteLine($"Voulez vous ajouter à la base de donnée le client Nom : {client.NOM}, Prénom : {client.PRENOM}, né le : {client.DATE_DE_NAISSANCE.ToString("dd/MM/yyyy")}, domicilié au {client.ADRESSE} {client.CODE_POSTAL} {client.VILLE}");
+            Console.WriteLine("O / N");
+            save = Console.ReadLine().ToUpper();
             if (save == "O")
             {
                 controler.WriteClient(client);
@@ -233,7 +239,7 @@ namespace Location_voitures_ADO_console
             Console.WriteLine("-3- Mise à jour du fichier Location");
             Console.WriteLine("-4- Suppression d'une Location");
             Console.WriteLine("-Q- Revenir au menu précédent");
-            return choix = Console.ReadLine();
+            return Console.ReadLine();
         }
         public static LOUE CreationLOC()
         {
@@ -247,7 +253,7 @@ namespace Location_voitures_ADO_console
             #endregion
 
             int IdClient;
-            while(!Int32.TryParse(GetInfo(MessageIdClient), out IdClient))
+            while (!Int32.TryParse(GetInfo(MessageIdClient), out IdClient))
                 Console.WriteLine("Erreur, l'ID_Client doit être uniquement composé de chiffres");  //récupère l'ID_Client
             int IdVehicule;
             while (!Int32.TryParse(GetInfo(MessageIdVehicule), out IdVehicule))
@@ -279,7 +285,10 @@ namespace Location_voitures_ADO_console
         }
 
 
-    #endregion
+        #endregion
+
+        #endregion
+
     }
 
 
