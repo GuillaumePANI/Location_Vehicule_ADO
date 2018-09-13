@@ -84,7 +84,7 @@ namespace Location_voitures_ADO_console
             return Console.ReadLine().ToUpper();
         }
 
-        public static Client CreationClient()
+        public static Clients CreationClient()
         {
             
             #region variables Client
@@ -115,11 +115,11 @@ namespace Location_voitures_ADO_console
             Console.WriteLine($"Voulez vous ajouter à la base de donnée le client Nom : {nom}, Prénom : {prenom}, né le : {birthdate.ToString("dd/MM/yyyy")}, domicilié au {adresse} {codeP} {ville}");
             Console.WriteLine("O / N");
             save = Console.ReadLine().ToUpper();
-            Client client = new Client();
+            Clients client = new Clients();
             client.Nom = nom; client.Prenom = prenom; client.Birthdate = birthdate; client.Adresse = adresse; client.Codep = codeP; client.Ville = ville; ;
             return client;
         }
-        public static void Ecrire_new_client(Client client)
+        public static void Ecrire_new_client(Clients client)
         {         if (save == "O")
             {
                 controler.WriteClient(client);

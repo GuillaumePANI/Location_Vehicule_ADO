@@ -34,6 +34,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,13 +44,65 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client.cs" />
+    <Compile Include="Clients.cs" />
     <Compile Include="Controler.cs" />
+    <Compile Include="EDMX\CATEGORIE.cs">
+      <DependentUpon>LocationDbFirst.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\CLIENT.cs">
+      <DependentUpon>LocationDbFirst.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\LocationDbFirst.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LocationDbFirst.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\LocationDbFirst.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LocationDbFirst.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\LocationDbFirst.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LocationDbFirst.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\LOUE.cs">
+      <DependentUpon>LocationDbFirst.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\MARQUE.cs">
+      <DependentUpon>LocationDbFirst.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\VEHICULE.cs">
+      <DependentUpon>LocationDbFirst.tt</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EntityDeploy Include="EDMX\LocationDbFirst.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>LocationDbFirst.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="EDMX\LocationDbFirst.edmx.diagram">
+      <DependentUpon>LocationDbFirst.edmx</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EDMX\LocationDbFirst.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>LocationDbFirst.edmx</DependentUpon>
+      <LastGenOutput>LocationDbFirst.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="EDMX\LocationDbFirst.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>LocationDbFirst.edmx</DependentUpon>
+      <LastGenOutput>LocationDbFirst.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

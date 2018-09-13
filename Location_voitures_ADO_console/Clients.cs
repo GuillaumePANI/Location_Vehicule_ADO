@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Location_voitures_ADO_console
 {
-    public class Client
+    public class Clients
     {
         public int Id_client { get; set; }
         public string Nom { get; set; }

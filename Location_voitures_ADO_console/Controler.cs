@@ -15,7 +15,7 @@ namespace Location_voitures_ADO_console
 
 
 
-        public void WriteClient(Client client)
+        public void WriteClient(Clients client)
         {
             try
             {
@@ -31,9 +31,9 @@ namespace Location_voitures_ADO_console
         }
 
 
-        public Client LectureBDD(int clientId)
+        public Clients LectureBDD(int clientId)
         {
-            Client client = new Client();
+            Clients client = new Clients();
             try
             {
                 using (SqlConnection sqlConnection = new SqlConnection(strConnexion))
@@ -48,7 +48,7 @@ namespace Location_voitures_ADO_console
                     SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
                     while (sqlDataReader.Read())
                     {
-                         client = new Client { Id_client = sqlDataReader.GetInt32(0), Nom = sqlDataReader.GetString(1), Prenom = sqlDataReader.GetString(2), Birthdate = sqlDataReader.GetDateTime(3), Adresse = sqlDataReader.GetString(4), Codep = sqlDataReader.GetInt32(5), Ville = sqlDataReader.GetString(6) };
+                         client = new Clients { Id_client = sqlDataReader.GetInt32(0), Nom = sqlDataReader.GetString(1), Prenom = sqlDataReader.GetString(2), Birthdate = sqlDataReader.GetDateTime(3), Adresse = sqlDataReader.GetString(4), Codep = sqlDataReader.GetInt32(5), Ville = sqlDataReader.GetString(6) };
 
                     }
                 } //sqlConnection.Close();
@@ -57,7 +57,7 @@ namespace Location_voitures_ADO_console
             return client;
         }
 
-        public void UpdateBDD(int idClient, Client client)
+        public void UpdateBDD(int idClient, Clients client)
         {
             try
             {
