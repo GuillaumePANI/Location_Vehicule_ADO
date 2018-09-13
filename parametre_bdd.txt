@@ -1,0 +1,38 @@
+nom du serveur : (localdb)\MSSQLLocalDB
+
+table : CATEGORIE
+CATEGORIE_ID	int
+LIBELLE		nvarchar(50)
+PRIX_KM		int
+	
+
+table : CLIENT
+ID_CLIENT	int
+NOM		nvarchar(50)
+PRENOM		nvarchar(50)
+DATE_DE_NAISSANCE	date
+ADRESSE		nvarchar(50)
+CODE_POSTAL	int
+VILLE		nvarchar(50)
+
+
+table : LOUE
+ID_CLIENT	int
+VEHICULE_ID	int
+NB_KM		int
+DATE_DEBUT	date
+DATE_FIN	date
+ID_LOCATION	int
+	
+table : MARQUE
+MARQUE_ID	int
+NOM		nvarchar(50)
+
+table : VEHICULE
+ID_VEHICULE	int
+IMMATRICULATION	nvarchar(50)
+COULEUR		nvarchar(50)
+DATE_DE_MISE_EN_SERVICE	date
+MARQUE_ID	int
+CATEGORIE_ID	int
+				
