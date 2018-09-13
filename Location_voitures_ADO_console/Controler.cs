@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Location_voitures_ADO_console.EDMX;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -6,73 +7,84 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Location_voitures_ADO_console
 {
     class Controler
     {
         public static string strConnexion = @"Data Source=(localdb)\MSSQLLocalDB; Integrated Security=SSPI;Initial Catalog=LOCATION";
-        public int nbRows;
+       
 
+        LOCATIONEntities Context = new LOCATIONEntities();
 
-
-        public void WriteClient(Clients client)
+        #region Table client
+        public void WriteClient(CLIENT client)
         {
-            try
-            {
-                using (SqlConnection sqlConnection = new SqlConnection(strConnexion))
-                {
-                    SqlCommand sqlCommand = new SqlCommand($"insert into CLIENT VALUES ('{client.Nom}','{client.Prenom}', '{client.Birthdate.ToString("yyyy-MM-dd")}', '{client.Adresse}', '{client.Codep}', '{client.Ville}')", sqlConnection);
-                    sqlConnection.Open();
-                    nbRows = sqlCommand.ExecuteNonQuery();
-                }
-            }//sqlConnection.Close();
-
-            catch (Exception e) { Console.WriteLine("Erreur :" + e.Message); }
+            Context.CLIENT.Add(client);
+            Context.SaveChanges();
         }
 
 
-        public Clients LectureBDD(int clientId)
+        public CLIENT LectureBDD(int clientId)
         {
-            Clients client = new Clients();
-            try
-            {
-                using (SqlConnection sqlConnection = new SqlConnection(strConnexion))
-                {
-                    SqlCommand sqlCommand = new SqlCommand($"select * from CLIENT where ID_CLIENT = {clientId}", sqlConnection);
+            CLIENT client = Context.CLIENT.FirstOrDefault(a => a.ID_CLIENT == clientId);
 
-
-
-                    sqlConnection.Open();
-                   
-
-                    SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-                    while (sqlDataReader.Read())
-                    {
-                         client = new Clients { Id_client = sqlDataReader.GetInt32(0), Nom = sqlDataReader.GetString(1), Prenom = sqlDataReader.GetString(2), Birthdate = sqlDataReader.GetDateTime(3), Adresse = sqlDataReader.GetString(4), Codep = sqlDataReader.GetInt32(5), Ville = sqlDataReader.GetString(6) };
-
-                    }
-                } //sqlConnection.Close();
-            }
-            catch (Exception e) { Console.WriteLine("Erreur :" + e.Message); }
             return client;
         }
 
-        public void UpdateBDD(int idClient, Clients client)
+        public void UpdateBDD(CLIENT client)
         {
-            try
-            {
-                using (SqlConnection sqlConnection = new SqlConnection(strConnexion))
-                {
-                    SqlCommand sqlCommand = new SqlCommand($"Update into CLIENT " +
-                        $"set NOM = '{client.Nom}', PRENOM = '{client.Prenom}', DATE_DE_NAISSANCE = '{client.Birthdate}', ADRESSE = '{client.Adresse}', CODE_POSTAL = {client.Codep}, VILLE = '{client.Ville}' " +
-                        $"where ID_CLIENT = {idClient}", sqlConnection);
-                    sqlConnection.Open();
-                    nbRows = sqlCommand.ExecuteNonQuery();
-
-
-                } //sqlConnection.Close();
-            }
-            catch (Exception e) { Console.WriteLine("Erreur :" + e.Message); }
+            CLIENT bDClient = Context.CLIENT.FirstOrDefault(a => a.ID_CLIENT == client.ID_CLIENT);
+            bDClient.NOM = client.NOM;
+            bDClient.PRENOM = client.PRENOM;
+            bDClient.DATE_DE_NAISSANCE = client.DATE_DE_NAISSANCE;
+            bDClient.ADRESSE = client.ADRESSE;
+            bDClient.CODE_POSTAL = client.CODE_POSTAL;
+            bDClient.VILLE = client.VILLE;
+            Context.SaveChanges();
         }
+
+        public void DeleteBdd(int idClient)
+        {
+            CLIENT client = Context.CLIENT.Find(idClient);
+            Context.CLIENT.Remove(client);
+            Context.SaveChanges();
+        }
+
+        #endregion
+
+        #region table LOUE
+
+        public void WriteLoc(LOUE loc)
+        {
+            Context.LOUE.Add(loc);
+            Context.SaveChanges();
+        }
+        public LOUE LectureLoc(int locID)
+        {
+            LOUE loc = Context.LOUE.FirstOrDefault(a => a.ID_LOCATION == locID);
+            return loc;
+        }
+
+        public void UpdateBDDLoc(LOUE loc)
+        {
+            LOUE bDloc = Context.LOUE.FirstOrDefault(a => a.ID_LOCATION == loc.ID_LOCATION);
+            bDloc.ID_CLIENT = loc.ID_CLIENT;
+            bDloc.VEHICULE_ID = loc.VEHICULE_ID;
+            bDloc.NB_KM = loc.NB_KM;
+            bDloc.DATE_DEBUT = loc.DATE_DEBUT;
+            bDloc.DATE_FIN = loc.DATE_FIN;
+            Context.SaveChanges();
+        }
+        public void DeleteBddLoc(int idLoc)
+        {
+            LOUE loc = Context.LOUE.Find(idLoc);
+            Context.LOUE.Remove(loc);
+            Context.SaveChanges();
+        }
+
+
+
+        #endregion
     }
 }

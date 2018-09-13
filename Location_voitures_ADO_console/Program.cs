@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Location_voitures_ADO_console.EDMX;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -13,59 +14,135 @@ namespace Location_voitures_ADO_console
         static string choix = "";
         static string save = "";
         public static Controler controler = new Controler();
-       
+
 
         static void Main(string[] args)
         {
-
-            //MENU CRUD CLIENT
-            while (AffichageMenuClient() != "q")
+            //MENU PRINCIPAL
+            while (AffichageMenuPrincipal() != "q")
                 switch (choix)
                 {
-                    case "1":
-                   var client = CreationClient();
-                        Ecrire_new_client(client);
-                        break;
 
+                    case "1":
+                        {
+                            //MENU CRUD CLIENT
+                            while (AffichageMenuClient() != "q")
+                                switch (choix)
+                                {
+                                    case "1":
+                                        var client = CreationClient();
+                                        Ecrire_new_client(client);
+                                        break;
+
+
+                                    case "2":
+                                        LectureListe();
+                                        break;
+
+
+
+                                    case "3":
+                                        int clientID;
+                                        while (!Int32.TryParse(GetInfo("Quelle Entrée souhaitez vous modifier ? Renseigner l'ID_Client"), out clientID))
+                                            Console.WriteLine("Erreur, l'ID_Client est incorrect");
+                                        CLIENT clt = CreationClient();
+                                        clt.ID_CLIENT = clientID;
+                                        controler.UpdateBDD(clt);
+
+                                        break;
+
+
+
+                                    case "4":
+                                        while (!Int32.TryParse(GetInfo("Quelle Entrée souhaitez vous supprimer ? Renseigner l'ID_Client"), out clientID))
+                                            Console.WriteLine("Erreur, l'ID_Client est incorrect");
+                                        controler.DeleteBdd(clientID);
+
+                                        break;
+
+                                    default:
+                                        Console.WriteLine("Erreur, veuillez réessayer");
+                                        break;
+
+
+                                }
+                            break;
+                        }
 
                     case "2":
-                        LectureListe();
-                        break;
+                        {
+                            //MENU CRUD LOCATION
+                            while (AffichageMenuLoc() != "q")
+                                switch (choix)
+                                {
+                                    case "1":
+                                        var loc = CreationLOC();
+                                        controler.WriteLoc(loc);
+                                        break;
+
+
+                                    case "2":
+                                        LectureLoc();
+                                        break;
 
 
 
-                    case "3":
-                        var idclient = GetIdClient();
-                        var clt = CreationClient();
-                        controler.UpdateBDD(idclient, clt);
-                        
-                        break;
+                                    case "3":
+                                        int locID;
+                                        while (!Int32.TryParse(GetInfo("Quelle Entrée souhaitez vous modifier ? Renseigner l'ID_Location"), out locID))
+                                            Console.WriteLine("Erreur, l'ID_Loc est incorrect");
+                                        loc = CreationLOC();
+                                        loc.ID_LOCATION = locID;
+                                        controler.UpdateBDDLoc(loc);
+
+                                        break;
 
 
 
-                    case "4":
+                                    case "4":
+                                        while (!Int32.TryParse(GetInfo("Quelle Entrée souhaitez vous supprimer ? Renseigner l'ID_Location"), out locID))
+                                            Console.WriteLine("Erreur, l'ID_Client est incorrect");
+                                        controler.DeleteBddLoc(locID);
 
-                        break;
+                                        break;
+
+                                    default:
+                                        Console.WriteLine("Erreur, veuillez réessayer");
+                                        break;
+
+
+                                }
+                            break;
+                        }
 
                     default:
-                        Console.WriteLine("Erreur, veuillez réessayer");
-                        break;
-
-
+                        Console.WriteLine("Erreur, veuillez recommencer"); break;
                 }
 
+        }
 
+        public static string GetInfo(string msg)
+        {
+            Console.WriteLine(msg);
+            return Console.ReadLine().ToUpper();
+        }
 
-
-
-
-
-
-
+        public static string AffichageMenuPrincipal()
+        {
+            Console.WriteLine("Sur quel fichier voulez vous travailler ?");
+            Console.WriteLine("-1- Fichier Client");
+            Console.WriteLine("-2- Fichier Location");
+            Console.WriteLine("-Q- Quitter");
+            return choix = Console.ReadLine();
         }
 
 
 
+
+
+
+
+        #region Manipulation BddCLIENT
 
         public static string AffichageMenuClient()
         {
@@ -78,15 +155,10 @@ namespace Location_voitures_ADO_console
             return choix = Console.ReadLine();
         }
 
-        public static string GetInfo(string msg)
-        {
-            Console.WriteLine(msg);
-            return Console.ReadLine().ToUpper();
-        }
 
-        public static Clients CreationClient()
+        public static CLIENT CreationClient()
         {
-            
+
             #region variables Client
             string MessageNom = "Veuillez renseigner le NOM puis valider en appuyant sur entrée";
             string MessagePrenom = "Veuillez renseigner le PRENOM puis valider en appuyant sur entrée";
@@ -115,15 +187,15 @@ namespace Location_voitures_ADO_console
             Console.WriteLine($"Voulez vous ajouter à la base de donnée le client Nom : {nom}, Prénom : {prenom}, né le : {birthdate.ToString("dd/MM/yyyy")}, domicilié au {adresse} {codeP} {ville}");
             Console.WriteLine("O / N");
             save = Console.ReadLine().ToUpper();
-            Clients client = new Clients();
-            client.Nom = nom; client.Prenom = prenom; client.Birthdate = birthdate; client.Adresse = adresse; client.Codep = codeP; client.Ville = ville; ;
+            CLIENT client = new CLIENT();
+            client.NOM = nom; client.PRENOM = prenom; client.DATE_DE_NAISSANCE = birthdate; client.ADRESSE = adresse; client.CODE_POSTAL = codeP; client.VILLE = ville; ;
             return client;
         }
-        public static void Ecrire_new_client(Clients client)
-        {         if (save == "O")
+        public static void Ecrire_new_client(CLIENT client)
+        {
+            if (save == "O")
             {
                 controler.WriteClient(client);
-                Console.WriteLine(controler.nbRows + "Client créé");
             }
         }
 
@@ -131,10 +203,10 @@ namespace Location_voitures_ADO_console
         {
             string MessageClientID = "Quelle entrée client souhaitez vous consulter ? Renseignez l'ID_CLIENT";
             int clientID;
-            while (! Int32.TryParse(GetInfo(MessageClientID), out clientID))
+            while (!Int32.TryParse(GetInfo(MessageClientID), out clientID))
                 Console.WriteLine("Erreur, ID Client non reconnue");
             Console.WriteLine(controler.LectureBDD(clientID));
-            
+
 
         }
 
@@ -148,16 +220,67 @@ namespace Location_voitures_ADO_console
             return idclient;
         }
 
+        #endregion
 
 
+        #region  Manipulation BddLocation
 
-        
+        public static string AffichageMenuLoc()
+        {
+            Console.WriteLine("Veuillez faire un choix");
+            Console.WriteLine("-1- Creation d'une nouvelle Location");
+            Console.WriteLine("-2- Lecture du fichier Location");
+            Console.WriteLine("-3- Mise à jour du fichier Location");
+            Console.WriteLine("-4- Suppression d'une Location");
+            Console.WriteLine("-Q- Revenir au menu précédent");
+            return choix = Console.ReadLine();
+        }
+        public static LOUE CreationLOC()
+        {
+
+            #region variables location
+            string MessageIdClient = "Veuillez renseigner l'ID_Client du conducteur";
+            string MessageIdVehicule = "Veuillez renseigner l'ID_Vehicule du véhicule loué";
+            string MessageNbKm = "Veuillez renseigner la distance parcourue";
+            string MessageDebut = "Veuillez renseigner la date de début de la location (JJ/MM/AAAA)";
+            string MessageFin = "Veuillez renseigner  la date de fin de la location (JJ/MM/AAAA)";
+            #endregion
+
+            int IdClient;
+            while(!Int32.TryParse(GetInfo(MessageIdClient), out IdClient))
+                Console.WriteLine("Erreur, l'ID_Client doit être uniquement composé de chiffres");  //récupère l'ID_Client
+            int IdVehicule;
+            while (!Int32.TryParse(GetInfo(MessageIdVehicule), out IdVehicule))
+                Console.WriteLine("Erreur, l'ID_Vehicule doit être uniquement composé de chiffres");  //récupère l'ID_Vegicule
+            int nbKm;
+            while (!Int32.TryParse(GetInfo(MessageNbKm), out nbKm))
+                Console.WriteLine("Erreur, le kilometrage doit être uniquement composé de chiffres");
+
+            DateTime dateDebut;
+            while (!DateTime.TryParse(GetInfo(MessageDebut), out dateDebut)) //récupère la date de début
+                Console.WriteLine("La date n'est pas au bon format");
+            DateTime dateFin;
+            while (!DateTime.TryParse(GetInfo(MessageFin), out dateFin)) //récupère la date de début
+                Console.WriteLine("La date n'est pas au bon format");
+
+            LOUE loc = new LOUE();
+            loc.ID_CLIENT = IdClient; loc.VEHICULE_ID = IdVehicule; loc.NB_KM = nbKm; loc.DATE_DEBUT = dateDebut; loc.DATE_FIN = dateFin;
+            return loc;
+        }
+        public static void LectureLoc()
+        {
+            string MessageLocID = "Quelle entrée location souhaitez vous consulter ? Renseignez l'ID_Location";
+            int locID;
+            while (!Int32.TryParse(GetInfo(MessageLocID), out locID))
+                Console.WriteLine("Erreur, ID Client non reconnue");
+            Console.WriteLine(controler.LectureLoc(locID));
 
 
+        }
 
 
+    #endregion
     }
-
 
 
 
